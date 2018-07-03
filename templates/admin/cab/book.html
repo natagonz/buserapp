@@ -1,0 +1,50 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+<link href="{{url_for ('static',filename='dashboard/css/route.css')}}" rel="stylesheet"/>
+
+<div class="container">
+  <div class="row">  
+  	<div class="col-md-12 text-center">	
+  		<h3>Cab Transfer Booking</h3>
+  		<br>
+  		<br>
+  	</div>
+
+    <div class="col-md-12">	
+      <!-- start -->
+       <table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Pickup</th>
+		      <th scope="col">Drop</th>
+		      <th scope="col">Status</th>		      
+		      <th scope="col"></th>
+		      <th scope="col"></th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for book in books %}
+		    <tr>
+		      <th>{{loop.index}}</th>
+		      <td>{{book.pickup}}</td>
+		      <td>{{book.drop}}</td>		      
+		      <td>{{book.status}}</td>
+		      <td><a href="/dashboard/admin/cab/book/{{book.id}}" class="btn btn-primary">edit</a></td>
+		      <td><a href="/dashboard/admin/cab/book/invoice/{{book.id}}" class="btn btn-success">invoice</a></td>
+		      <td><a href="/dashboard/admin/cab/book/delete/{{book.id}}" class="btn btn-danger">delete</a></td>	      
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		</table>
+		
+	</div>
+  </div>
+</div>
+	
+
+
+
+{% endblock %}

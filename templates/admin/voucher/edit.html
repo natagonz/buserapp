@@ -1,0 +1,93 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+
+<ul id="social_side_links">
+  <li><a data-toggle="modal" data-target="#exampleModalLong" ><img class="icon-float" src="https://cdn0.iconfinder.com/data/icons/round-ui-icons/512/add_blue.png" alt="" /></a></li>
+</ul>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Voucher</h5> 
+              
+      </div>
+      <div class="modal-body">
+      {% from "includes/_formhelpers.html" import render_field %}
+            <form method="POST" enctype="multipart/form-data" id="form">
+               {{ form.hidden_tag() }}
+                <div class="row">                    
+                  <div class="col-md-6">
+                    <div class="form-group">
+                    {{ render_field(form.title, class="form-control",autocomplete="off")}}
+                        </div>
+                    </div>  
+                    <div class="col-md-6">
+                    <div class="form-group">
+                    {{ render_field(form.price, class="form-control",autocomplete="off")}}
+                        </div>
+                    </div>  
+                </div>
+                <div class="row">                         
+                    <div class="col-md-12">
+                        <div class="form-group">
+                    {{ render_field(form.img, class="form-control",autocomplete="off")}}
+                        </div>
+                    </div>                               
+                </div>                    
+                <div class="row">  
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        {{ render_field(form.detail, class="form-control",id="editor")}}
+                        </div>
+                    </div>  
+                </div>                                                          
+      </div>
+
+      <div class="modal-footer">
+        <a href="/dashboard/admin/voucher" class="btn btn-secondary">Cancel</a>  
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<section class="blog">
+
+    <!-- Page Content -->
+    <div class="container">    
+      <div class="row">
+     {% for voucher in vouchers %}
+        <div class="col-lg-4 col-sm-4 portfolio-item">
+          <div class="card h-100 hover-shadow">
+
+            <a href="/blog/"><img class="card-img-top" src="{{voucher.img}}" alt=""></a>
+            <div class="card-body">                         
+              <h5 class="card-text"><a href="/voucher/{{voucher.id}}">{{voucher.title }}</a></h5>
+              <h3 class="card-text text-right"><a href="/voucher/{{voucher.id}}">${{voucher.price}}</a></h3>
+            </div>           
+
+          </div>
+        </div>     
+      {% endfor %}  
+     
+      </div><!-- /.row -->     
+    </div> <!-- /.page content -->
+    
+
+
+      
+</section>
+
+<script>
+  $(document).ready(function() {
+  $('#exampleModalLong').modal('show');
+});
+</script>
+
+{% endblock %}    

@@ -1,0 +1,46 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+
+ <section id="features" class="features">
+ <div class="container">
+ <div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Voucher Booking Detail</h5>  
+        <p class="card-text">Name : {{ book.username }}</p>
+        <p class="card-text">Email : {{ book.email }}</p>
+        <p class="card-text">Phone : {{ book.phone }}</p>   
+        <p class="card-text">Voucher : {{ book.title }}</p>          
+        <p class="card-text">Price : $ {{ book.price }}</p>
+        <p class="card-text">Person : {{ book.person }}</p>
+        <p class="card-text">Status : {{ book.status }}</p>       
+        <p class="card-text">Date : {{ book.date.strftime("%d-%B-%Y") }}</p>
+        <p class="card-text">Detail : {{ book.detail }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Edit Payment</h5>
+         {% from "includes/_formhelpers.html" import render_field %}
+          <form method="POST" enctype="multipart/form-data" id="form">
+           {{ form.hidden_tag() }}                  
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              {{ render_field(form.status, class="form-control",autocomplete="off")}}
+            </div>                            
+          </div>           
+            <button type="submit" class="btn btn-primary">Update</button>
+         </form>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</section>
+
+
+{% endblock %}
