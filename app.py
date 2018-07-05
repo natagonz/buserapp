@@ -31,6 +31,7 @@ class User(db.Model):
 	cabtransfer = db.relationship("CabTransferBook",backref="cabtransfer",lazy="dynamic")
 	chartertransfer = db.relationship("CabCharterBook",backref="chartertransfer",lazy="dynamic")
 	voucher = db.relationship("VoucherBook",backref="voucher",lazy="dynamic")
+	bodyguard = db.relationship("BodyGuardBook",backref="bodyguard",lazy="dynamic")
 	
 	def is_active(self):
 		return True
@@ -111,6 +112,20 @@ class VoucherBook(db.Model):
 	person = db.Column(db.Integer())
 	status = db.Column(db.String(200))	
 	voucher_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
+
+class BodyGuardBook(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	title = db.Column(db.String(200))
+	email = db.Column(db.String(200))
+	username = db.Column(db.String(200))
+	phone = db.Column(db.String(200))	
+	date = db.Column(db.DateTime())	
+	detail = db.Column(db.Text())	
+	price = db.Column(db.Integer())
+	person = db.Column(db.Integer())
+	status = db.Column(db.String(200))	
+	bodyguard_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
+
 
 
 
@@ -580,6 +595,12 @@ def UserCharterTransferPayment(id):
 ##################################################### Voucher ####################################################
 @app.route("/dashboard/admin/voucher",methods=["GET","POST"])
 @login_required
+def VoucherIndex():
+	return render_template("admin/voucher/voucher.html")
+
+
+@app.route("/dashboard/admin/voucher/all",methods=["GET","POST"])
+@login_required
 def AllVoucher():
 	vouchers = Voucher.query.all()
 	form = AddVoucherForm()
@@ -700,6 +721,91 @@ def UserVoucherBook(id):
 def UserVoucherPayment(id):
 	voucher = VoucherBook.query.filter_by(id=id).first_or_404()
 	return render_template("user/voucher/payment.html",voucher=voucher)
+
+
+################################################## Body Guard ########################################
+@app.route("/bodyguard",methods=["GET","POST"])
+def UserBodyGuardBook():	
+	form = VoucherBookForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first()
+		if user:
+			login_user(user)		
+			person = form.person.data 
+			price = 100 * int(person)				
+			book = BodyGuardBook(title="Bodyguard Services".title,price=price,username=form.username.data,person=person,
+				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=user.id)
+			db.session.add(book)
+			db.session.commit()
+		else :
+			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			db.session.add(new)
+			db.session.commit()
+			login_user(new)	
+			person = form.person.data 
+			price = 100 * int(person)				
+			book = BodyGuardBook(title="Bodyguard Services",price=price,username=form.username.data,person=person,
+				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=new.id)
+			db.session.add(book)
+			db.session.commit()
+		return redirect(url_for("UserBodyGuardPayment",id=book.id))
+	return render_template("user/bodyguard/detail.html",form=form)
+
+@app.route("/bodyguard/payment/<id>",methods=["GET","POST"])
+def UserBodyGuardPayment(id):
+	book = BodyGuardBook.query.filter_by(id=id).first_or_404()
+	return render_template("user/bodyguard/payment.html",book=book)
+
+
+@app.route("/dashboard/admin/bodyguard/book",methods=["GET","POST"])
+@login_required
+def AllBodyGuardBook():
+	books = BodyGuardBook.query.all()	
+	return render_template("admin/bodyguard/book.html",books=books)
+
+@app.route("/dashboard/admin/bodyguard/book/<id>",methods=["GET","POST"])
+@login_required
+def VoucherBodyGuardEdit(id):
+	book = BodyGuardBook.query.filter_by(id=id).first_or_404()
+	form = EditStatusForm()
+	form.status.data = book.status
+	if form.validate_on_submit():
+		book.status = request.form["status"]
+		db.session.commit()
+
+		flash("Data berhasil di update","success")
+		return redirect(url_for("AllBodyGuardBook"))
+	return render_template("admin/bodyguard/edit_status.html",form=form,book=book)	
+
+
+@app.route("/dashboard/admin/bodyguard/book/invoice/<id>",methods=["GET","POST"])
+@login_required
+def AdminBodyGuardInvoice(id):
+	book = BodyGuardBook.query.filter_by(id=id).first_or_404()
+	return render_template("admin/bodyguard/invoice.html",book=book)	
+
+
+@app.route("/dashboard/admin/bodyguard/book/delete/<id>",methods=["GET","POST"])
+@login_required
+def AdminBodyGuardBookDelete(id):
+	book = BodyGuardBook.query.filter_by(id=id).first_or_404()
+	db.session.delete(book)
+	db.session.commit()
+	flash("data berhasil dihapus","success")
+	return redirect(url_for("AllBodyGuardBook"))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
