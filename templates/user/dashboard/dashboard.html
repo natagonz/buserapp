@@ -1,0 +1,97 @@
+
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+<link href="{{url_for ('static',filename='dashboard/css/route.css')}}" rel="stylesheet"/>
+
+<div class="container">
+  <div class="row">  
+  	<div class="col-md-12 text-center">	
+  		<h3>Booking List</h3>
+  		<br>
+  		<br>
+  	</div>
+
+    <div class="col-md-12">	
+      <!-- start -->
+       <table class="table">
+		  <thead>
+		    <tr>		      
+		      <th scope="col">Item</th>
+		      <th scope="col">Services</th>
+		      <th scope="col">Status</th>
+		      <th scope="col">Price</th>
+		      <th scope="col"></th>		      
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for cab in cabs %}
+		    <tr>		     
+		      <td>{{cab.pickup}} - {{cab.drop}}</td>		     		      
+		      <td>Cab Charter</td>
+		      <td>{{ cab.status }}</td>	    
+		      {% if cab.status == "on request" %}
+		      	<td>on request</td>
+		      	<td><a href="/cabtransfer/request/notification" class="btn btn-primary">pay</a></td>
+		      {% else %}	
+		      	<td>$ {{cab.price}}</td>
+		      	<td><a href="/charter/{{cab.id}}" class="btn btn-primary">pay</a></td>
+		      {% endif %}	
+		           
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		  <tbody>
+		  	{% for trans in transfers %}
+		    <tr>		     
+		      <td>{{trans.pickup}} - {{trans.drop}}</td>		     		      
+		      <td>Cab Transfer</td>
+		      <td>{{ trans.status }}</td>	    
+		      {% if trans.status == "on request" %}
+		      	<td>on request</td>
+		      	<td><a href="/cabtransfer/request/notification" class="btn btn-primary">pay</a></td>
+		      {% else %}	
+		      	<td>$ {{trans.price}}</td>
+		      	<td><a href="/cabtransfer/{{trans.id}}" class="btn btn-primary">pay</a></td>
+		      {% endif %}	
+		           
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		  <tbody>
+		  	{% for voucher in vouchers %}
+		    <tr>		      
+		      <td>{{voucher.title}}</td>		     		      
+		      <td>Voucher</td>
+		      <td>{{ voucher.status }}</td>	    
+		      <td>$ {{voucher.price}}</td>
+		      <td><a href="/voucher/payment/{{voucher.id}}" class="btn btn-primary">pay</a></td>
+		     
+		           
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		  <tbody>
+		  	{% for body in bodys %}
+		    <tr>		      
+		      <td>{{body.title}}</td>		     		      
+		      <td>Voucher</td>
+		      <td>{{ body.status }}</td>	    
+		      <td>$ {{body.price}}</td>
+		      <td><a href="/bodyguard/payment/{{body.id}}" class="btn btn-primary">pay</a></td>
+		     
+		           
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+
+		</table>
+		
+	</div>
+  </div>
+</div>
+	
+
+
+
+{% endblock %}

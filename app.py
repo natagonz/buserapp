@@ -10,7 +10,7 @@ from flask_mail import Mail,Message
 from functools import wraps
 from form import RegisterForm,LoginForm,AddCabTransferRouteForm,PickLocationForm,EditStatusForm,PickLocationIndexForm
 from form import CabTransferDetailForm,EditCabTransferDetailForm,CabCharterDetailForm,AddVoucherForm,VoucherBookForm
-
+import hashlib
 
 
 app = Flask(__name__) 
@@ -388,7 +388,9 @@ def UserCabTransferNotification():
 @app.route("/cabtransfer/<id>",methods=["GET","POST"])
 def UserCabTransferPayment(id):
 	book = CabTransferBook.query.filter_by(id=id).first_or_404()
-	return render_template("user/cab/payment.html",book=book)
+	secret = str(book.price) + "1lxl0y1"
+	md5 = hashlib.md5(secret).hexdigest()
+	return render_template("user/cab/payment.html",book=book,md5=md5)
 
 
 ################################################# Cab Charter ##############################################
@@ -588,7 +590,9 @@ def UserCharterTransferRequest(pickup,drop):
 @app.route("/charter/<id>",methods=["GET","POST"])
 def UserCharterTransferPayment(id):
 	book = CabCharterBook.query.filter_by(id=id).first_or_404()
-	return render_template("user/charter/payment.html",book=book)
+	secret = str(book.price) + "1lxl0y1"
+	md5 = hashlib.md5(secret).hexdigest()
+	return render_template("user/charter/payment.html",book=book,md5=md5)
 
 
 
@@ -720,7 +724,9 @@ def UserVoucherBook(id):
 @app.route("/voucher/payment/<id>",methods=["GET","POST"])
 def UserVoucherPayment(id):
 	voucher = VoucherBook.query.filter_by(id=id).first_or_404()
-	return render_template("user/voucher/payment.html",voucher=voucher)
+	secret = str(voucher.price) + "1lxl0y1"
+	md5 = hashlib.md5(secret).hexdigest()
+	return render_template("user/voucher/payment.html",voucher=voucher,md5=md5)
 
 
 ################################################## Body Guard ########################################
@@ -732,8 +738,9 @@ def UserBodyGuardBook():
 		if user:
 			login_user(user)		
 			person = form.person.data 
-			price = 100 * int(person)				
-			book = BodyGuardBook(title="Bodyguard Services".title,price=price,username=form.username.data,person=person,
+			price = 100 * int(person)	
+			title = "Bodyguard Services"			
+			book = BodyGuardBook(title=title,price=price,username=form.username.data,person=person,
 				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=user.id)
 			db.session.add(book)
 			db.session.commit()
@@ -743,8 +750,9 @@ def UserBodyGuardBook():
 			db.session.commit()
 			login_user(new)	
 			person = form.person.data 
-			price = 100 * int(person)				
-			book = BodyGuardBook(title="Bodyguard Services",price=price,username=form.username.data,person=person,
+			price = 100 * int(person)
+			title = "Bodyguard Services"				
+			book = BodyGuardBook(title=title,price=price,username=form.username.data,person=person,
 				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=new.id)
 			db.session.add(book)
 			db.session.commit()
@@ -753,8 +761,10 @@ def UserBodyGuardBook():
 
 @app.route("/bodyguard/payment/<id>",methods=["GET","POST"])
 def UserBodyGuardPayment(id):
-	book = BodyGuardBook.query.filter_by(id=id).first_or_404()
-	return render_template("user/bodyguard/payment.html",book=book)
+	book = BodyGuardBook.query.filter_by(id=id).first_or_404()	
+	secret = str(book.price) + "1lxl0y1"
+	md5 = hashlib.md5(secret).hexdigest()
+	return render_template("user/bodyguard/payment.html",book=book,md5=md5)
 
 
 @app.route("/dashboard/admin/bodyguard/book",methods=["GET","POST"])
@@ -796,8 +806,15 @@ def AdminBodyGuardBookDelete(id):
 
 
 
-
-
+############################################################ User Dashboard ################################
+@app.route("/dashboard/user",methods=["GET","POST"])
+@login_required
+def UserDashboard():
+	cabs = CabCharterBook.query.filter_by(chartertransfer_id=current_user.id).all() 
+	vouchers = VoucherBook.query.filter_by(voucher_id=current_user.id).all()
+	transfers = CabTransferBook.query.filter_by(cabtransfer_id=current_user.id).all()
+	bodys = BodyGuardBook.query.filter_by(bodyguard_id=current_user.id).all()
+	return render_template("user/dashboard/dashboard.html",cabs=cabs,vouchers=vouchers,transfers=transfers,bodys=bodys)
 
 
 
