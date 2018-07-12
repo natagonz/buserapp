@@ -99,8 +99,9 @@
 			   		<div class="container-fluid">
 			   			<div class="row">
 				   			<div class="col-md-6 col-sm-12 col-md-offset-3 slider-text">
-				   				<div class="slider-text-inner text-center">
-				   					<h1>Great Bali Trip Began From Here</h1>
+				   				<div class="slider-text-inner">
+				   					<h1 class="text-center">Great Bali Trip Began From Here</h1>
+
 				   					{% from "includes/_formhelpers.html" import render_field %}
 							          <form method="POST" enctype="multipart/form-data" id="form">
 							           {{ form.hidden_tag() }}
@@ -112,7 +113,7 @@
 							              {{ render_field(form.drop, class="form-control",id="txt_Destination")}}
 							            </div>
 							            <div class="col-md-2 submited">
-							            <button type="submit" class="btn btn-primary">Book Now</button>
+							            <button type="submit" class="btn btn-primary">Book Cab Transfer</button>
 							        	</div>
 							          </div>                
 							          

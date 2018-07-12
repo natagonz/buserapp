@@ -12,6 +12,9 @@ class LoginForm(FlaskForm):
 	email = StringField("Email",validators=[InputRequired(),Email(),Length(max=100)])
 	password = PasswordField("Password",validators=[InputRequired(),Length(min=6,max=100)])
 
+class UserLoginForm(FlaskForm):
+	email = StringField("Email",validators=[InputRequired(),Email(),Length(max=100)])
+	
 class AddCabTransferRouteForm(FlaskForm):
 	pickup = StringField("Pickup",validators=[InputRequired()])
 	drop = StringField("Drop",validators=[InputRequired()])
@@ -25,8 +28,8 @@ class PickLocationForm(FlaskForm):
 	drop = StringField("Drop",validators=[InputRequired()])
 
 class PickLocationIndexForm(FlaskForm):
-	pickup = StringField("",validators=[InputRequired()])
-	drop = StringField("",validators=[InputRequired()])
+	pickup = StringField("From",validators=[InputRequired()])
+	drop = StringField("To",validators=[InputRequired()])
 
 
 class CabTransferDetailForm(FlaskForm):

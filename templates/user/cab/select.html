@@ -1,0 +1,39 @@
+{% extends "layout/booktemplate.html" %}
+
+
+
+
+{% block content %}
+<link href="{{url_for ('static',filename='book/css/select.css')}}" rel="stylesheet"/>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<br>
+<br>
+<br>
+<div class="container">
+<div class="col-md-12">
+    <div class="card b-1 hover-shadow mb-20">
+        <div class="card-body media  ">
+        	<div class="row">
+            <div class="col-md-6">
+                <img class="car" src="http://masterpizindomobil.com/wp-content/uploads/2018/01/AYLA-SILVER.png" alt="...">
+            </div>
+            <div class="col-md-3">
+            	<h3>Economy</h3>
+                <p>The most affordable option for 1-­4 people.</p>
+            </div>
+            <div class="col-md-3">
+                <p class="fs-14 text-fade mb-12"><i class="fa fa-map-marker pr-1"></i> Menlo Park, CA</p>
+                <span class="text-fade"><i class="fa fa-money pr-1"></i> $60 per hour</span>
+            </div>
+        	</div>
+        </div>
+    </div>
+
+   
+
+    
+    <br>
+</div>
+</div>
+{% endblock %}

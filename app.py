@@ -8,7 +8,7 @@ from flask_login import LoginManager , UserMixin, login_user, login_required, lo
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 from flask_mail import Mail,Message 
 from functools import wraps
-from form import RegisterForm,LoginForm,AddCabTransferRouteForm,PickLocationForm,EditStatusForm,PickLocationIndexForm
+from form import UserLoginForm,RegisterForm,LoginForm,AddCabTransferRouteForm,PickLocationForm,EditStatusForm,PickLocationIndexForm
 from form import CabTransferDetailForm,EditCabTransferDetailForm,CabCharterDetailForm,AddVoucherForm,VoucherBookForm
 import hashlib
 
@@ -192,6 +192,21 @@ def AdminLogin():
 @login_required
 def AdminDashboard():
 	return render_template("admin/dashboard/index.html")
+
+
+@app.route("/login",methods=["GET","POST"])
+def UserLogin():
+	form = UserLoginForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first()
+		if user and user.role == "user":
+			login_user(user)
+			return redirect(url_for("UserDashboard"))
+		else :
+			flash("invalid login")
+	return render_template("auth/login.html",form=form)			
+
+
 
 
 
@@ -819,7 +834,9 @@ def UserDashboard():
 
 
 
-
+@app.route("/select")
+def SeleectCaar():
+	return render_template("user/cab/select.html")
 
 
 
