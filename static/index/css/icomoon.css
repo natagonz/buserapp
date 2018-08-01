@@ -2066,6 +2066,7 @@
 }
 .icon-instagram:before {
   content: "\eac2";
+  width: 100px;
 }
 .icon-whatsapp:before {
   content: "\eac3";
