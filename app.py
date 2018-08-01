@@ -8,9 +8,14 @@ from flask_login import LoginManager , UserMixin, login_user, login_required, lo
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 from flask_mail import Mail,Message 
 from functools import wraps
-from form import UserLoginForm,RegisterForm,LoginForm,AddCabTransferRouteForm,PickLocationForm,EditStatusForm,PickLocationIndexForm
+from form import UserLoginForm,RegisterForm,LoginForm,PickLocationForm,EditStatusForm,PickLocationIndexForm,AddCabTransferRouteForm
 from form import CabTransferDetailForm,EditCabTransferDetailForm,CabCharterDetailForm,AddVoucherForm,VoucherBookForm,BodyguardPriceForm,AddBuserDriverForm,EditBuserDriverForm,FilterDriverForm
+from form import AddLocationForm
 import hashlib
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField ,TextAreaField, IntegerField, DateField, SelectField, SubmitField,FloatField,DecimalField
+from wtforms.validators import InputRequired, EqualTo, Email, Length
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 
 app = Flask(__name__) 
@@ -44,6 +49,17 @@ class User(db.Model):
 
 	def is_anonymous(self):
 		return False
+
+class Location(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	location = db.Column(db.String(200))
+
+	def __repr__(self):
+		return '{}'.format(self.location)
+
+def location_query():
+	return Location.query.all()	
+
 
 class CabTransfer(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
@@ -140,9 +156,7 @@ class BuserDriver(db.Model):
 	status = db.Column(db.String(200))	
 
 
-
-
-
+################################################## Form ######################################################
 
 
 #################################################### Decorator ##############################################################################
@@ -240,17 +254,13 @@ def AdminCabRoute():
 	if form.validate_on_submit():
 		pickup = form.pickup.data
 		drop = form.drop.data 
-		#check
-		check = CabTransfer.query.filter_by(pickup=pickup,drop=drop).first()
-		if check:
-			flash("Rute sudah ada","danger")
-		else :
-			rute = CabTransfer(pickup=pickup,drop=drop,micro=form.micro.data,standard=form.standard.data,executive=form.executive.data,minibus=form.minibus.data)	
-			db.session.add(rute)
-			db.session.commit()
+		
+		rute = CabTransfer(pickup=pickup,drop=drop,micro=form.micro.data,standard=form.standard.data,executive=form.executive.data,minibus=form.minibus.data)	
+		db.session.add(rute)
+		db.session.commit()
 
-			flash("rute berhasil ditambah","success")
-			return redirect(url_for("AdminCabRoute"))
+		flash("rute berhasil ditambah","success")
+		return redirect(url_for("AdminCabRoute"))
 	return render_template("admin/cab/route.html",form=form,routes=routes)
 
 @app.route("/dashboard/admin/cab/route/<id>",methods=["GET","POST"])
@@ -268,21 +278,17 @@ def AdminCabRouteEdit(id):
 	if form.validate_on_submit():
 		pickup = request.form["pickup"]
 		drop = request.form["drop"]
-		#check
-		check = CabTransfer.query.filter_by(pickup=pickup,drop=drop).first()
-		if check:
-			flash("Rute sudah ada","danger")
-		else :
-			cab.pickup = pickup
-			cab.drop = drop
-			cab.micro = request.form["micro"]
-			cab.standard = request.form["standard"]
-			cab.executive = request.form["executive"]
-			cab.minibus = request.form["minibus"]
-			db.session.commit()
+		
+		cab.pickup = pickup
+		cab.drop = drop
+		cab.micro = request.form["micro"]
+		cab.standard = request.form["standard"]
+		cab.executive = request.form["executive"]
+		cab.minibus = request.form["minibus"]
+		db.session.commit()
 
-			flash("rute berhasil di edit","success")
-			return redirect(url_for("AdminCabRoute"))	
+		flash("rute berhasil di edit","success")
+		return redirect(url_for("AdminCabRoute"))	
 	return render_template("admin/cab/route.html",form=form,routes=routes)
 
 @app.route("/dashboard/admin/cab/route/<id>/delete",methods=["GET","POST"])
@@ -946,6 +952,64 @@ def FilterDriver():
 def DriverResult(status,region):
 	drivers = BuserDriver.query.filter_by(status=status,region=region).all()
 	return render_template("admin/driver/all.html",drivers=drivers)
+
+
+
+################################################ Location ##############################
+@app.route("/dashboard/admin/location",methods=["GET","POST"])
+@login_required
+def AllLocation():
+	locations = Location.query.all()
+	form = AddLocationForm()
+	if form.validate_on_submit():
+		check = Location.query.filter_by(location=form.location.data).all()
+		if len(check) > 0 :
+			flash("Rute tidak boleh sama","danger")
+		else :
+			new = Location(location=form.location.data)	
+			db.session.add(new)
+			db.session.commit()
+			flash("rute berhasil di tambah","success")
+			return redirect(url_for("AllLocation"))
+	return render_template("admin/location/all.html",form=form,locations=locations)		
+
+
+@app.route("/dashboard/admin/location/<id>",methods=["GET","POST"])
+@login_required
+def EditLocation(id):
+	locations = Location.query.all()
+	location = Location.query.filter_by(id=id).first_or_404()
+	form = AddLocationForm()
+	form.location.data = location.location
+	if form.validate_on_submit():
+		loc = request.form["location"]
+		check = Location.query.filter_by(location=loc).all()
+		if len(check) > 0 :
+			flash("Rute tidak boleh sama","danger")
+		else :	
+			location.location = loc
+			db.session.commit()
+			flash("rute berhasil di update","success")
+			return redirect(url_for("AllLocation"))
+	return render_template("admin/location/edit.html",form=form,locations=locations)	
+
+
+@app.route("/dashboard/admin/location/<id>/delete",methods=["GET","POST"])
+@login_required
+def DeleteLocation(id):
+	location = Location.query.filter_by(id=id).first_or_404()
+	db.session.delete(location)
+	db.session.commit()
+	flash("Lokasi berhasil di hapus","success")
+	return redirect(url_for("AllLocation"))
+
+
+
+
+
+
+
+
 
 
 

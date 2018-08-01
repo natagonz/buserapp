@@ -15,6 +15,16 @@ class LoginForm(FlaskForm):
 class UserLoginForm(FlaskForm):
 	email = StringField("Email",validators=[InputRequired(),Email(),Length(max=100)])
 	
+
+
+class PickLocationForm(FlaskForm):
+	pickup = StringField("Pickup",validators=[InputRequired()])
+	drop = StringField("Drop",validators=[InputRequired()])
+
+class PickLocationIndexForm(FlaskForm):
+	pickup = StringField("Where do want to go",validators=[InputRequired()])
+	drop = StringField("",validators=[InputRequired()])
+
 class AddCabTransferRouteForm(FlaskForm):
 	pickup = StringField("Pickup",validators=[InputRequired()])
 	drop = StringField("Drop",validators=[InputRequired()])
@@ -22,14 +32,6 @@ class AddCabTransferRouteForm(FlaskForm):
 	standard = IntegerField("standard",validators=[InputRequired()])
 	executive = IntegerField("executive",validators=[InputRequired()])
 	minibus = IntegerField("minibus",validators=[InputRequired()])
-
-class PickLocationForm(FlaskForm):
-	pickup = StringField("Pickup",validators=[InputRequired()])
-	drop = StringField("Drop",validators=[InputRequired()])
-
-class PickLocationIndexForm(FlaskForm):
-	pickup = StringField("Cab Transfer",validators=[InputRequired()])
-	drop = StringField("",validators=[InputRequired()])
 
 
 class CabTransferDetailForm(FlaskForm):
@@ -99,6 +101,8 @@ class FilterDriverForm(FlaskForm):
 	status =  SelectField("Status",choices= [("non aktif","non aktif"),("aktif","aktif")])	
 
 
+class AddLocationForm(FlaskForm):
+	location = StringField("Location",validators=[InputRequired()])
 
 
 
