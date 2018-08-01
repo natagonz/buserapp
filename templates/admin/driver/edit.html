@@ -1,0 +1,117 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+<link href="{{url_for ('static',filename='dashboard/css/route.css')}}" rel="stylesheet"/>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Driver</h5>           
+      </div>
+      
+      <div class="modal-body">                
+      {% from "includes/_formhelpers.html" import render_field %}
+        <form method="POST" enctype="multipart/form-data" id="form">
+        {{ form.hidden_tag() }}                
+          <div class="row">  
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ render_field(form.username, class="form-control")}}
+              </div>                      
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ render_field(form.email, class="form-control")}}
+              </div>                      
+            </div>                                        
+          </div>     
+          <div class="row">  
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ render_field(form.phone, class="form-control")}}
+              </div>                      
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ render_field(form.region, class="form-control")}}
+              </div>                      
+            </div>                                        
+          </div> 
+          <div class="row">  
+            <div class="col-md-12">
+              <div class="form-group">
+                {{ render_field(form.status, class="form-control")}}
+              </div>                      
+            </div>                                                  
+          </div>                  
+      </div>
+
+      <div class="modal-footer">
+        <a href="/dashboard/admin/driver" class="btn btn-secondary">Cancel</a>   
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end edit-->
+
+
+
+
+<div class="container">
+  <div class="row">  
+  	<div class="col-md-12 text-center">	
+  		<h3>All Driver</h3>
+  		<br>
+  		<br>
+  	</div>
+
+    <div class="col-md-12">	
+      <!-- start -->
+       <table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Nama</th>
+		      <th scope="col">Email</th>
+		      <th scope="col">Phone</th>	
+		      <th scope="col">Region</th>
+		      <th scope="col">Status</th>			      
+		      <th scope="col"></th>
+		      <th scope="col"></th>		      
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for driver in drivers %}
+		    <tr>
+		      <th>{{loop.index}}</th>
+		      <td>{{driver.username}}</td>
+		      <td>{{driver.email}}</td>		      
+		      <td>{{driver.phone}}</td>
+		      <td>{{driver.region}}</td>
+		      <td>{{driver.status}}</td>
+		      <td><a href="/dashboard/admin/driver/{{driver.id}}" class="btn btn-primary">edit</a></td>		
+		      <td><a href="/dashboard/admin/driver/delete/{{driver.id}}" class="btn btn-danger">delete</a></td>	      
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		</table>
+		
+	</div>
+  </div>
+</div>
+	
+
+<script>
+  $(document).ready(function() {
+  $('#exampleModalLong').modal('show');
+});
+</script>
+
+
+
+{% endblock %}

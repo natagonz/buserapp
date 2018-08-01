@@ -28,8 +28,8 @@ class PickLocationForm(FlaskForm):
 	drop = StringField("Drop",validators=[InputRequired()])
 
 class PickLocationIndexForm(FlaskForm):
-	pickup = StringField("From",validators=[InputRequired()])
-	drop = StringField("To",validators=[InputRequired()])
+	pickup = StringField("Cab Transfer",validators=[InputRequired()])
+	drop = StringField("",validators=[InputRequired()])
 
 
 class CabTransferDetailForm(FlaskForm):
@@ -69,4 +69,36 @@ class VoucherBookForm(FlaskForm):
 
 class EditStatusForm(FlaskForm):
 	status =  SelectField("Payment Status",choices= [("on request","on request"),("unpaid","unpaid"),("paid","paid")])
+
+class BodyguardPriceForm(FlaskForm):
+	price = IntegerField("harga",validators=[InputRequired()])
+
+class AddBuserDriverForm(FlaskForm):
+	email = StringField("Email",validators=[Email()])
+	username = StringField("Name",validators=[InputRequired()])
+	phone = StringField("Phone",validators=[InputRequired()])
+	region = SelectField("Region",choices= [("Buleleng","Buleleng"),("Denpasar","Denpasar"),("Badung","Badung"),
+		("Tabanan","Tabanan"),("Gianyar","Gianyar"),("Bangli","Bangli"),("Karang Asem","Karang Asem"),("Jembrana","Jembrana")
+		,("Klungkung","Klungkung")])
 	
+
+class EditBuserDriverForm(FlaskForm):
+	email = StringField("Email",validators=[Email()])
+	username = StringField("Name",validators=[InputRequired()])
+	phone = StringField("Phone",validators=[InputRequired()])
+	region = SelectField("Region",choices= [("Buleleng","Buleleng"),("Denpasar","Denpasar"),("Badung","Badung"),
+		("Tabanan","Tabanan"),("Gianyar","Gianyar"),("Bangli","Bangli"),("Karang Asem","Karang Asem"),("Jembrana","Jembrana")
+		,("Klungkung","Klungkung")])
+	status =  SelectField("Status",choices= [("non aktif","non aktif"),("aktif","aktif")])	
+
+
+class FilterDriverForm(FlaskForm):
+	region = SelectField("Region",choices= [("Buleleng","Buleleng"),("Denpasar","Denpasar"),("Badung","Badung"),
+		("Tabanan","Tabanan"),("Gianyar","Gianyar"),("Bangli","Bangli"),("Karang Asem","Karang Asem"),("Jembrana","Jembrana")
+		,("Klungkung","Klungkung")])
+	status =  SelectField("Status",choices= [("non aktif","non aktif"),("aktif","aktif")])	
+
+
+
+
+

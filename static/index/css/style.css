@@ -1766,3 +1766,12 @@ input[type="text"] {
 .submited {
   margin-top: 25px;
 }
+
+.form-div{
+  background: yellow; 
+  border-radius: 10px;
+}
+
+.form-row{
+  background-color: yellow;
+}

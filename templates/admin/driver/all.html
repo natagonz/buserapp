@@ -1,0 +1,55 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+<link href="{{url_for ('static',filename='dashboard/css/route.css')}}" rel="stylesheet"/>
+<ul id="social_side_links">
+  <li><a href="/dashboard/admin/driver/filter" " ><img class="icon-float" src="https://cdn1.vectorstock.com/i/thumb-large/54/60/filter-icon-balance-or-equalizer-sound-settings-vector-14125460.jpg" alt="" /></a></li>
+</ul>
+
+<div class="container">
+  <div class="row">  
+  	<div class="col-md-12 text-center">	
+  		<h3>All Driver</h3>
+  		<br>
+  		<br>
+  	</div>
+
+    <div class="col-md-12">	
+      <!-- start -->
+       <table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Nama</th>
+		      <th scope="col">Email</th>
+		      <th scope="col">Phone</th>	
+		      <th scope="col">Region</th>
+		      <th scope="col">Status</th>			      
+		      <th scope="col"></th>
+		      <th scope="col"></th>		      
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for driver in drivers %}
+		    <tr>
+		      <th>{{loop.index}}</th>
+		      <td>{{driver.username}}</td>
+		      <td>{{driver.email}}</td>		      
+		      <td>{{driver.phone}}</td>
+		      <td>{{driver.region}}</td>
+		      <td>{{driver.status}}</td>
+		      <td><a href="/dashboard/admin/driver/{{driver.id}}" class="btn btn-primary">edit</a></td>		
+		      <td><a href="/dashboard/admin/driver/delete/{{driver.id}}" class="btn btn-danger">delete</a></td>	      
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		</table>
+		
+	</div>
+  </div>
+</div>
+	
+
+
+
+{% endblock %}

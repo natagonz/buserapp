@@ -9,7 +9,7 @@ from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 from flask_mail import Mail,Message 
 from functools import wraps
 from form import UserLoginForm,RegisterForm,LoginForm,AddCabTransferRouteForm,PickLocationForm,EditStatusForm,PickLocationIndexForm
-from form import CabTransferDetailForm,EditCabTransferDetailForm,CabCharterDetailForm,AddVoucherForm,VoucherBookForm
+from form import CabTransferDetailForm,EditCabTransferDetailForm,CabCharterDetailForm,AddVoucherForm,VoucherBookForm,BodyguardPriceForm,AddBuserDriverForm,EditBuserDriverForm,FilterDriverForm
 import hashlib
 
 
@@ -125,6 +125,21 @@ class BodyGuardBook(db.Model):
 	person = db.Column(db.Integer())
 	status = db.Column(db.String(200))	
 	bodyguard_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
+
+class BodyGuardPrice(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	price = db.Column(db.Integer())
+
+
+class BuserDriver(db.Model):
+	id = db.Column(db.Integer,primary_key=True)
+	email = db.Column(db.String(200))
+	username = db.Column(db.String(200))
+	phone = db.Column(db.String(200))	
+	region = db.Column(db.String(200))
+	status = db.Column(db.String(200))	
+
+
 
 
 
@@ -745,15 +760,36 @@ def UserVoucherPayment(id):
 
 
 ################################################## Body Guard ########################################
+@app.route("/dashboard/admin/bodyguard",methods=["GET","POST"])
+@login_required
+def BodyGuardRoute():
+	return render_template("admin/bodyguard/bodyguard.html")
+
+
+@app.route("/dashboard/admin/bodyguard/price/<id>",methods=["GET","POST"])
+@login_required
+def AddBodyGuardPrice(id):
+	form = BodyguardPriceForm()
+	price = BodyGuardPrice.query.filter_by(id=id).first_or_404()
+	form.price.data = price.price
+	if form.validate_on_submit():
+		price.price = request.form["price"]
+		db.session.commit()
+		flash("harga bodyguard berhasil di rubah","success")
+		return redirect(url_for("AddBodyGuardPrice",id=id))
+	return render_template("admin/bodyguard/price.html",form=form,price=price)	
+
+
 @app.route("/bodyguard",methods=["GET","POST"])
 def UserBodyGuardBook():	
 	form = VoucherBookForm()
+	bodyguard = BodyGuardPrice.query.first()
 	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
+		user = User.query.filter_by(email=form.email.data).first()		
 		if user:
 			login_user(user)		
 			person = form.person.data 
-			price = 100 * int(person)	
+			price = bodyguard.price * int(person)	
 			title = "Bodyguard Services"			
 			book = BodyGuardBook(title=title,price=price,username=form.username.data,person=person,
 				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=user.id)
@@ -765,14 +801,14 @@ def UserBodyGuardBook():
 			db.session.commit()
 			login_user(new)	
 			person = form.person.data 
-			price = 100 * int(person)
+			price = bodyguard.price * int(person)
 			title = "Bodyguard Services"				
 			book = BodyGuardBook(title=title,price=price,username=form.username.data,person=person,
 				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=new.id)
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserBodyGuardPayment",id=book.id))
-	return render_template("user/bodyguard/detail.html",form=form)
+	return render_template("user/bodyguard/detail.html",form=form,bodyguard=bodyguard)
 
 @app.route("/bodyguard/payment/<id>",methods=["GET","POST"])
 def UserBodyGuardPayment(id):
@@ -834,9 +870,87 @@ def UserDashboard():
 
 
 
-@app.route("/select")
-def SeleectCaar():
-	return render_template("user/cab/select.html")
+
+
+######################################################## Driver ###########################################
+@app.route("/driver",methods=["GET","POST"])
+def AddBuserDriver():
+	form = AddBuserDriverForm()
+	if form.validate_on_submit():
+		driver = BuserDriver(username=form.username.data,email=form.email.data,phone=form.phone.data,region=form.region.data,status="non aktif")
+		db.session.add(driver)
+		db.session.commit()
+		return redirect(url_for("DriverConfirmation"))
+	return render_template("user/driver/add.html",form=form)	
+
+@app.route("/driver/confirmation",methods=["GET","POST"])
+def DriverConfirmation():
+	return render_template("user/driver/confirmation.html")
+
+
+@app.route("/dashboard/admin/driver",methods=["GET","POST"])
+@login_required
+def AllDriver():
+	drivers = BuserDriver.query.all()
+	return render_template("admin/driver/all.html",drivers=drivers)
+
+
+@app.route("/dashboard/admin/driver/<id>",methods=["GET","POST"])
+@login_required
+def EditDriver(id):
+	drivers = BuserDriver.query.all()
+	form = EditBuserDriverForm()
+	driver = BuserDriver.query.filter_by(id=id).first()
+	form.username.data = driver.username
+	form.email.data = driver.email
+	form.phone.data = driver.phone
+	form.region.data = driver.region
+	form.status.data = driver.status
+	if form.validate_on_submit():
+		driver.username = request.form["username"]
+		driver.email = request.form["email"]
+		driver.phone = request.form["phone"]
+		driver.region = request.form["region"]
+		driver.status = request.form["status"]
+
+		db.session.commit()
+		flash("Driver berhasil di update","success")
+		return redirect(url_for("AllDriver"))
+	return render_template("admin/driver/edit.html",form=form,drivers=drivers)	
+
+
+@app.route("/dashboard/admin/driver/delete/<id>",methods=["GET","POST"])
+@login_required
+def DeleteDriver(id):
+	driver = BuserDriver.query.filter_by(id=id).first()
+	db.session.delete(driver)
+	db.session.commit()
+	flash("Driver berhasil di hapus","success")
+	return redirect(url_for("AllDriver"))
+
+
+@app.route("/dashboard/admin/driver/filter",methods=["GET","POST"])
+@login_required
+def FilterDriver():
+	form = FilterDriverForm()
+	drivers = BuserDriver.query.all()
+	if form.validate_on_submit():		
+		status = form.status.data 
+		region = form.region.data 
+		return redirect(url_for("DriverResult",status=status,region=region))
+	return render_template("admin/driver/filter.html",form=form,drivers=drivers)	
+
+
+@app.route("/dashboard/admin/driver/<status>/<region>",methods=["GET","POST"])
+@login_required
+def DriverResult(status,region):
+	drivers = BuserDriver.query.filter_by(status=status,region=region).all()
+	return render_template("admin/driver/all.html",drivers=drivers)
+
+
+
+
+
 
 
 

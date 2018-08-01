@@ -1,0 +1,67 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+    
+<div class="container">
+  <div class="row">
+  	<div class="col-md-12">	
+  		<h3 class="text-center">Hi {{ current_user.username }}</h3>
+  		<h6 class="text-center">BodyGuard</h6>
+  	</div>	
+
+	<div class="col-md-12">		
+	<br>
+	<br>
+	
+	<div class="row">	  	  
+	  	<div class="col-md-6 col-lg-6">
+	  	  	<div class="card">      
+	    		  <div class="card-body text-center pt-1 pb-20">
+	      		  <a href="#">
+	        		<img class="avatar avatar-xxl" src="https://png.icons8.com/dusk/50/000000/security-checked.png">
+	          
+	        	  </a>
+	        	  <h5 class="mt-2 mb-0"><a class="hover-primary" href="/dashboard/admin/bodyguard/price/1">Price</a></h5>
+	        	  <br>
+	        	  <p class="text-center">Rubah harga bodyguard</p>
+	       		  <a href="/dashboard/admin/bodyguard/price/1" class="btn btn-info">Visit</a>	       
+	      		</div>
+	      
+	    	</div>
+	 	</div>
+
+	  	<div class="col-md-6 col-lg-6">
+	    	<div class="card">      
+	      		<div class="card-body text-center pt-1 pb-20">
+		        <a href="#">
+		          <img class="avatar avatar-xxl" src="https://png.icons8.com/dusk/50/000000/shop.png">	          
+		        </a>
+		        <h5 class="mt-2 mb-0"><a class="hover-primary" href="/dashboard/admin/bodyguard/book">Bodyguard Booking</a></h5>
+		        <br>
+		        <p class="text-center">List semua booking untuk bodyguard. Lihat status pembayaran tiap konsumen dan print invoice</p>
+		        <a href="/dashboard/admin/bodyguard/book" class="btn btn-info">Visit</a>	       
+	        	</div>
+	    	</div>
+	 	 </div>      
+    </div>
+ 
+	</div>
+
+			
+	
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

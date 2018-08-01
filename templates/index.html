@@ -61,8 +61,7 @@
 
 	</head>
 	<body>
-		
-	<div class="colorlib-loader"></div>
+	
 	<ul id="social_side_links">
 	  <li><a href="https://api.whatsapp.com/send?phone=081246198502&text=I'm%20interested%20in%20your%20car%20for%20sale"><img class="icon-float" src="https://png.icons8.com/color/50/000000/whatsapp.png" alt="" /></a></li>
 	</ul>
@@ -74,7 +73,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-md-2">
-							<div id="colorlib-logo"><a href="index.html">BuserCab</a></div>
+							<div id="colorlib-logo"><img src="static/buser.png" style="width: 200px;"></div>
 						</div>
 						<div class="col-md-10 text-right menu-1">
 							<ul>
@@ -98,26 +97,27 @@
 			   		<div class="overlay"></div>
 			   		<div class="container-fluid">
 			   			<div class="row">
-				   			<div class="col-md-6 col-sm-12 col-md-offset-3 slider-text">
+				   			<div class="col-md-12 slider-text">
 				   				<div class="slider-text-inner">
 				   					<h1 class="text-center">Great Bali Trip Began From Here</h1>
-
+				   					<div class="form-div col-md-12">				   						
 				   					{% from "includes/_formhelpers.html" import render_field %}
 							          <form method="POST" enctype="multipart/form-data" id="form">
 							           {{ form.hidden_tag() }}
 							          <div class="form-row">
 							            <div class="col-md-5">
-							               {{ render_field(form.pickup, class="form-control",id="txt_Source")}}
+							               {{ render_field(form.pickup, class="form-control",id="txt_Source",placeholder="from")}}
 							            </div>
 							            <div class="col-md-5">
-							              {{ render_field(form.drop, class="form-control",id="txt_Destination")}}
+							              {{ render_field(form.drop, class="form-control",id="txt_Destination",placeholder="destination")}}
 							            </div>
-							            <div class="col-md-2 submited">
-							            <button type="submit" class="btn btn-primary">Book Cab Transfer</button>
+							            <div class="col-md-1 submited">
+							            <button type="submit" class="btn btn-primary">Book Now</button>
 							        	</div>
 							          </div>                
 							          
-							         </form>			   					
+							         </form>							         
+							        </div>			   					
 				   				</div>
 				   			</div>
 				   		</div>
@@ -136,30 +136,30 @@
 						<div class="intro-flex">
 							<div class="one-third intro-img" style="background-image: url('https://images.pexels.com/photos/235648/pexels-photo-235648.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')">
 								<div class="desc">
-									<h3>Charter</h3>
-									<p>Trip anywhere in Bali with our experienced driver</p>
+									<h3>Cab Charter</h3>
+									<p>Tour trip anywhere in Bali with our experienced driver</p>
 									<a href="/charter" class="btn btn-primary">Book Now</a>									
 								</div>
 							</div>
 							<div class="one-third intro-img" style="background-image: url('https://images.pexels.com/photos/2143/lights-party-dancing-music.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')">
 								<div class="desc">
-									<h3>Voucher</h3>
-									<p>Have an event in Bali ? let us provide transport for your event</p>
-									<a data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Book Now</a>	
+									<h3>Voucher</h3>								
+									<p>Collect all your incredible activities</p>
+									<a href="/voucher" class="btn btn-primary">Book Now</a>	
 								</div>
 							</div>
 							<div class="one-third intro-img" style="background-image: url('https://images.pexels.com/photos/723240/pexels-photo-723240.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')">
 								<div class="desc">
 									<h3>Cab Transfer</h3>
 									<p>Need transport after landing in Bali ? Let us pick you up</p>
-									<a href="/cab" class="btn btn-primary">Book Now</a>		
+									<a href="/cabtransfer" class="btn btn-primary">Book Now</a>		
 								</div>
 							</div>
 							<div class="one-third intro-img" style="background-image: url('http://www.jobmail.co.za/blog/wp-content/uploads/2015/07/Bodyguard-walking.jpg')">
 								<div class="desc">
 									<h3>Bodyguard Service</h3>
-									<p>Feel safe with our certificate body guard</p>
-									<a data-toggle="modal" data-target="#exampleModalAir" class="btn btn-primary">Book Now</a>		
+									<p>Feel safe with our profesional body guard</p>
+									<a href="/bodyguard" class="btn btn-primary">Book Now</a>			
 								</div>
 							</div>
 						</div>
@@ -297,10 +297,10 @@
 						<p>Buser Cab opertaed by Bali Ultimate Service Driver. A well known transport company in Bali. We was experienced in Travel and Transportation in Bali </p>
 						<p>
 							<ul class="colorlib-social-icons">
-								<li><a href="#"><i class="icon-twitter"></i></a></li>
-								<li><a href="#"><i class="icon-facebook"></i></a></li>
-								<li><a href="#"><i class="icon-linkedin"></i></a></li>
-								<li><a href="#"><i class="icon-dribbble"></i></a></li>
+								
+								<li><a href="https://www.instagram.com/busercab"><i class="icon-instagram"></i></a></li>
+								<li><a href="https://www.facebook.com/Busercabcom-1565013063608571"><i class="icon-facebook"></i></a></li>
+								<li><a href="https://www.youtube.com/channel/UC4I-CmRFH_LdPvGVfZ1w-Pw"><i class="icon-youtube"></i></a></li>
 							</ul>
 						</p>
 					</div>
@@ -308,9 +308,10 @@
 						<h4>Quick Links</h4>
 						<p>
 							<ul class="colorlib-footer-links">
-								<li><a href="#"><i class="icon-check"></i> Home</a></li>							
-								<li><a href="#"><i class="icon-check"></i> Login</a></li>
-								<li><a href="#"><i class="icon-check"></i> Dashboard</a></li>								
+								<li><a href="/"><i class="icon-check"></i> Home</a></li>							
+								<li><a href="/login"><i class="icon-check"></i> Login</a></li>
+								<li><a href="/dashboard/user"><i class="icon-check"></i> Dashboard</a></li>	
+								<li><a href="/driver"><i class="icon-check"></i> Daftar Driver</a></li>								
 							</ul>
 						</p>
 					</div>
