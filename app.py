@@ -418,7 +418,7 @@ def UserCabTransferNotification():
 @app.route("/cabtransfer/<id>",methods=["GET","POST"])
 def UserCabTransferPayment(id):
 	book = CabTransferBook.query.filter_by(id=id).first_or_404()
-	secret = str(book.price) + "1lxl0y1"
+	secret = str(book.price) + "17cclrc"
 	md5 = hashlib.md5(secret).hexdigest()
 	return render_template("user/cab/payment.html",book=book,md5=md5)
 
@@ -620,7 +620,7 @@ def UserCharterTransferRequest(pickup,drop):
 @app.route("/charter/<id>",methods=["GET","POST"])
 def UserCharterTransferPayment(id):
 	book = CabCharterBook.query.filter_by(id=id).first_or_404()
-	secret = str(book.price) + "1lxl0y1"
+	secret = str(book.price) + "17cclrc"
 	md5 = hashlib.md5(secret).hexdigest()
 	return render_template("user/charter/payment.html",book=book,md5=md5)
 
@@ -754,7 +754,7 @@ def UserVoucherBook(id):
 @app.route("/voucher/payment/<id>",methods=["GET","POST"])
 def UserVoucherPayment(id):
 	voucher = VoucherBook.query.filter_by(id=id).first_or_404()
-	secret = str(voucher.price) + "1lxl0y1"
+	secret = str(voucher.price) + "17cclrc"
 	md5 = hashlib.md5(secret).hexdigest()
 	return render_template("user/voucher/payment.html",voucher=voucher,md5=md5)
 
@@ -813,7 +813,7 @@ def UserBodyGuardBook():
 @app.route("/bodyguard/payment/<id>",methods=["GET","POST"])
 def UserBodyGuardPayment(id):
 	book = BodyGuardBook.query.filter_by(id=id).first_or_404()	
-	secret = str(book.price) + "1lxl0y1"
+	secret = str(book.price) + "17cclrc"
 	md5 = hashlib.md5(secret).hexdigest()
 	return render_template("user/bodyguard/payment.html",book=book,md5=md5)
 
