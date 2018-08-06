@@ -81,7 +81,8 @@ class CabTransferBook(db.Model):
 	drop = db.Column(db.String(200))	
 	car = db.Column(db.String(200))	
 	price = db.Column(db.Integer())	
-	status = db.Column(db.String(200))	
+	status = db.Column(db.String(200))
+	driver = db.Column(db.String(200))	
 	cabtransfer_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
 
 
@@ -107,6 +108,7 @@ class CabCharterBook(db.Model):
 	price = db.Column(db.Integer())
 	hour = db.Column(db.Integer())
 	status = db.Column(db.String(200))	
+	driver = db.Column(db.String(200))
 	chartertransfer_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
 
 class Voucher(db.Model):
@@ -305,12 +307,14 @@ def AdminCabBookEdit(id):
 	form.price.data = book.price
 	form.car.data = book.car
 	form.date.data = book.date 
+	form.driver.data = book.driver
 	if form.validate_on_submit():
 		book.car = request.form["car"]
 		book.price = request.form["price"]
 		book.status = request.form["status"]
 		date = datetime.strptime(request.form["date"], '%m/%d/%Y').strftime('%Y-%m-%d')	
 		book.date = date 
+		book.driver = request.form["driver"]
 		db.session.commit()
 		flash("data berhasil di update","success")
 		return redirect(url_for("AdminCabBookAll"))
@@ -371,7 +375,7 @@ def UserCabTransferDetail(pickup,drop,car):
 		user = User.query.filter_by(email=form.email.data).first()
 		if user:
 			login_user(user)			
-			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=user.id)
+			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
@@ -379,7 +383,7 @@ def UserCabTransferDetail(pickup,drop,car):
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
-			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=new.id)
+			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCabTransferPayment",id=book.id))
@@ -392,7 +396,7 @@ def UserCabTransferRequest(pickup,drop):
 		user = User.query.filter_by(email=form.email.data).first()
 		if user:
 			login_user(user)			
-			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=user.id)
+			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
@@ -400,7 +404,7 @@ def UserCabTransferRequest(pickup,drop):
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
-			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=new.id)
+			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCabTransferNotification"))
@@ -502,12 +506,14 @@ def AdminCharterBookEdit(id):
 	form.price.data = book.price
 	form.car.data = book.car
 	form.date.data = book.date 
+	form.driver.data = book.driver
 	if form.validate_on_submit():
 		book.car = request.form["car"]
 		book.price = request.form["price"]
 		book.status = request.form["status"]
 		date = datetime.strptime(request.form["date"], '%m/%d/%Y').strftime('%Y-%m-%d')	
 		book.date = date 
+		driver = request.form["driver"]
 		db.session.commit()
 		flash("data berhasil di update","success")
 		return redirect(url_for("AdminCharterBookAll"))
@@ -569,7 +575,7 @@ def UserCharterTransferDetail(pickup,drop,car):
 			hour = form.hour.data 
 			price = amount * int(hour)				
 			book = CabCharterBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=user.id)
+				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
@@ -580,7 +586,7 @@ def UserCharterTransferDetail(pickup,drop,car):
 			hour = form.hour.data 
 			price = amount * int(hour)	
 			book = CabCharterBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=new.id)
+				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCharterTransferPayment",id=book.id))
@@ -596,7 +602,7 @@ def UserCharterTransferRequest(pickup,drop):
 			login_user(user)		
 			hour = form.hour.data 						
 			book = CabCharterBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=user.id)
+				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
@@ -606,7 +612,7 @@ def UserCharterTransferRequest(pickup,drop):
 			login_user(new)	
 			hour = form.hour.data 			
 			book = CabCharterBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=new.id)
+				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCabTransferNotification",id=book.id))

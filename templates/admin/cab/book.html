@@ -19,6 +19,7 @@
 		      <th scope="col">#</th>
 		      <th scope="col">Pickup</th>
 		      <th scope="col">Drop</th>
+		      <th scope="col">Driver</th>
 		      <th scope="col">Status</th>		      
 		      <th scope="col"></th>
 		      <th scope="col"></th>
@@ -30,7 +31,8 @@
 		    <tr>
 		      <th>{{loop.index}}</th>
 		      <td>{{book.pickup}}</td>
-		      <td>{{book.drop}}</td>		      
+		      <td>{{book.drop}}</td>	
+		       <td>{{book.driver}}</td>		      
 		      <td>{{book.status}}</td>
 		      <td><a href="/dashboard/admin/cab/book/{{book.id}}" class="btn btn-primary">edit</a></td>
 		      <td><a href="/dashboard/admin/cab/book/invoice/{{book.id}}" class="btn btn-success">invoice</a></td>

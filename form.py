@@ -39,13 +39,14 @@ class CabTransferDetailForm(FlaskForm):
 	username = StringField("Username",validators=[InputRequired()])
 	phone = StringField("Phone",validators=[InputRequired()])
 	date = DateField("Date",format="%m/%d/%Y")
-	detail = TextAreaField("Notes")	
+	detail = StringField("How Many Person",validators=[InputRequired()])		
 
 class EditCabTransferDetailForm(FlaskForm):
 	car = SelectField("Car",choices= [("on request","on request"),("micro","micro"),("standard","standard"),("executive","executive"),("minibus","minibus")])
 	price = IntegerField("Price",validators=[InputRequired()])
 	date = DateField("Date",format="%m/%d/%Y")
 	status =  SelectField("Payment Status",choices= [("on request","on request"),("unpaid","unpaid"),("paid","paid")])
+	driver = StringField("Driver")
 
 class CabCharterDetailForm(FlaskForm):
 	email = StringField("Email",validators=[Email()])
@@ -53,7 +54,7 @@ class CabCharterDetailForm(FlaskForm):
 	phone = StringField("Phone",validators=[InputRequired()])
 	date = DateField("Date",format="%m/%d/%Y")
 	hour = SelectField("Hour",choices= [("6","6"),("12","12")])
-	detail = TextAreaField("Notes")		
+	detail = StringField("How Many Person",validators=[InputRequired()])		
 
 class AddVoucherForm(FlaskForm):
 	title = StringField("title",validators=[InputRequired()])
