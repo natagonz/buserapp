@@ -373,17 +373,18 @@ def UserCabTransferDetail(pickup,drop,car):
 	form = CabTransferDetailForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
+		phone = str(form.code.data) + str(form.phone.data)
 		if user:
 			login_user(user)			
-			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=user.id,driver="on request")
+			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
-			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
-			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=new.id,driver="on request")
+			book = CabTransferBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",cabtransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCabTransferPayment",id=book.id))
@@ -394,17 +395,18 @@ def UserCabTransferRequest(pickup,drop):
 	form = CabTransferDetailForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
+		phone = str(form.code.data) + str(form.phone.data)
 		if user:
 			login_user(user)			
-			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=user.id,driver="on request")
+			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
-			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
-			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=new.id,driver="on request")
+			book = CabTransferBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="on request",cabtransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCabTransferNotification"))
@@ -570,23 +572,24 @@ def UserCharterTransferDetail(pickup,drop,car):
 	form = CabCharterDetailForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
+		phone = str(form.code.data) + str(form.phone.data)
 		if user:
 			login_user(user)		
 			hour = form.hour.data 
 			price = amount * int(hour)				
 			book = CabCharterBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=user.id,driver="on request")
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
-			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
 			hour = form.hour.data 
 			price = amount * int(hour)	
 			book = CabCharterBook(car=car,pickup=pickup,drop=drop,price=price,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=new.id,driver="on request")
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCharterTransferPayment",id=book.id))
@@ -598,21 +601,22 @@ def UserCharterTransferRequest(pickup,drop):
 	form = CabCharterDetailForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
+		phone = str(form.code.data) + str(form.phone.data)
 		if user:
 			login_user(user)		
 			hour = form.hour.data 						
 			book = CabCharterBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=user.id,driver="on request")
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=user.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		else :
-			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
 			hour = form.hour.data 			
 			book = CabCharterBook(car="on request",pickup=pickup,drop=drop,price=0,username=form.username.data,hour=hour,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=new.id,driver="on request")
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=new.id,driver="on request")
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserCabTransferNotification",id=book.id))
@@ -730,23 +734,24 @@ def UserVoucherBook(id):
 	form = VoucherBookForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
+		phone = str(form.code.data) + str(form.phone.data)
 		if user:
 			login_user(user)		
 			person = form.person.data 
 			price = voucher.price * int(person)				
 			book = VoucherBook(title=voucher.title,price=price,username=form.username.data,person=person,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",voucher_id=user.id)
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",voucher_id=user.id)
 			db.session.add(book)
 			db.session.commit()
 		else :
-			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
 			person = form.person.data 
 			price = voucher.price * int(person)				
 			book = VoucherBook(title=voucher.title,price=price,username=form.username.data,person=person,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",voucher_id=new.id)
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",voucher_id=new.id)
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserVoucherPayment",id=book.id))
@@ -787,18 +792,19 @@ def UserBodyGuardBook():
 	form = VoucherBookForm()
 	bodyguard = BodyGuardPrice.query.first()
 	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()		
+		user = User.query.filter_by(email=form.email.data).first()	
+		phone = str(form.code.data) + str(form.phone.data)	
 		if user:
 			login_user(user)		
 			person = form.person.data 
 			price = bodyguard.price * int(person)	
 			title = "Bodyguard Services"			
 			book = BodyGuardBook(title=title,price=price,username=form.username.data,person=person,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=user.id)
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=user.id)
 			db.session.add(book)
 			db.session.commit()
 		else :
-			new = User(username=form.username.data,email=form.email.data,phone=form.phone.data,role="user")
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
 			db.session.add(new)
 			db.session.commit()
 			login_user(new)	
@@ -806,7 +812,7 @@ def UserBodyGuardBook():
 			price = bodyguard.price * int(person)
 			title = "Bodyguard Services"				
 			book = BodyGuardBook(title=title,price=price,username=form.username.data,person=person,
-				email=form.email.data,phone=form.phone.data,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=new.id)
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",bodyguard_id=new.id)
 			db.session.add(book)
 			db.session.commit()
 		return redirect(url_for("UserBodyGuardPayment",id=book.id))

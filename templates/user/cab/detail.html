@@ -37,16 +37,19 @@
           </div>                    
           <div class="form-row">
             <div class="form-group col-md-6">
-              {{ render_field(form.phone, class="form-control",autocomplete="off")}}
+              {{ render_field(form.code, class="form-control",autocomplete="off")}}
             </div>
             <div class="form-group col-md-6">
+              {{ render_field(form.phone, class="form-control",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-12">
               {{ render_field(form.date, class="form-control dtpick",autocomplete="off")}}
             </div>
                       
           </div>             
           <div class="form-row">
             <div class="form-group col-md-12">
-              {{ render_field(form.detail, class="form-control",autocomplete="off",placeholder="ex: hotel name")}}
+              {{ render_field(form.detail, class="form-control",autocomplete="off")}}
             </div>
           </div>  
             <button type="submit" class="btn btn-primary">Book Now</button>
