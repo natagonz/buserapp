@@ -13,12 +13,12 @@
         <p class="card-text">Email : {{ book.email }}</p>
         <p class="card-text">Phone : {{ book.phone }}</p>      
         <p class="card-text">Pickup : {{ book.pickup }}</p>
-        <p class="card-text">Drop : {{ book.drop }}</p> 
+        
         <p class="card-text">Car : {{ book.car }}</p> 
         <p class="card-text">Price : $ {{ book.price }}</p>
         <p class="card-text">Hour : {{ book.hour }}</p>
         <p class="card-text">Status : {{ book.status }}</p>       
-        <p class="card-text">Date : {{ book.date.strftime("%d-%B-%Y") }}</p>
+        <p class="card-text">Date : {{ book.date.strftime("%d-%B-%Y") }} / {{ book.jam}}</p>
         <p class="card-text">Person : {{ book.detail }}</p>
         <p class="card-text">Driver : {{ book.driver }}</p>
 

@@ -16,10 +16,7 @@
 		  <div class="form-row">
 		  	<div class="form-group col-md-2">
 		       {{ render_field(form.pickup, class="form-control",id="txt_Source")}}
-		    </div>
-		    <div class="form-group col-md-2">
-		       {{ render_field(form.drop, class="form-control",id="txt_Destination")}}
-		    </div>
+		    </div>		    
 		    <div class="form-group col-md-2">
 		       {{ render_field(form.micro, class="form-control")}}
 		    </div>
@@ -47,7 +44,7 @@
 		    <tr>
 		      <th scope="col">#</th>
 		      <th scope="col">Pickup</th>
-		      <th scope="col">Drop</th>
+		      
 		      <th scope="col">Micro</th>
 		      <th scope="col">Standard</th>
 		      <th scope="col">Executive</th>
@@ -61,7 +58,7 @@
 		    <tr>
 		      <th>{{loop.index}}</th>
 		      <td>{{route.pickup}}</td>
-		      <td>{{route.drop}}</td>
+		     
 		      <td>${{route.micro}}/hour</td>
 		      <td>${{route.standard}}/hour</td>
 		      <td>${{route.executive}}/hour</td>

@@ -1,0 +1,49 @@
+{% extends "layout/dashboardtemplate.html" %}
+
+{% block content %}
+<link href="{{url_for ('static',filename='dashboard/css/route.css')}}" rel="stylesheet"/>
+
+<div class="container">
+  <div class="row">  
+  	<div class="col-md-12 text-center">	
+  		<h3>All Travel Agent</h3>
+  		<br>
+  		<br>
+  	</div>
+
+    <div class="col-md-12">	
+      <!-- start -->
+       <table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Nama</th>
+		      <th scope="col">Email</th>
+		      <th scope="col">Phone</th>
+		      <th scope="col"></th>	
+		      		      
+		           
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for driver in drivers %}
+		    <tr>
+		      <th>{{loop.index}}</th>
+		      <td>{{driver.username}}</td>
+		      <td>{{driver.email}}</td>		      
+		      <td>{{driver.phone}}</td>
+		      
+		      <td><a href="/dashboard/admin/agent/delete/{{driver.id}}" class="btn btn-danger">delete</a></td>	      
+		    </tr>	
+		    {% endfor %}	    
+		  </tbody>
+		</table>
+		
+	</div>
+  </div>
+</div>
+	
+
+
+
+{% endblock %}

@@ -48,7 +48,7 @@
                     
                     <h4><strong>Email: </strong>{{ book.email }}</h4>
                     <h4><strong>Call: </strong>{{book.phone}}</h4>
-                    <h4><strong>Date: </strong>{{ book.date.strftime("%d-%B-%Y") }}</h4>
+                    <h4><strong>Date: </strong>{{ book.date.strftime("%d-%B-%Y") }} / {{ book.jam}}</h4>
                     <h4><strong>Car: </strong>{{book.car}}</h4>
                     <h4><strong>Hour: </strong>{{book.hour}}</h4>
                     <h4><strong>Driver: </strong>{{book.driver}}</h4>
@@ -74,7 +74,7 @@
                                 <tr>                                    
                                     <th>Item</th> 
                                     <th>Pickup</th>
-                                    <th>Drop</th>                                   
+                                                                    
                                     <th>Price</th>                                    
                                 </tr>
                             </thead>
@@ -82,7 +82,7 @@
                                 <tr>
                                     <td>Cab Charter</td>
                                     <td>{{ book.pickup }}</td>
-                                    <td>{{ book.drop }}</td>
+                                    
                                     <td>$ {{ book.price }}</td>
                                 </tr>
                             </tbody>

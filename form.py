@@ -21,6 +21,10 @@ class PickLocationForm(FlaskForm):
 	pickup = StringField("Pickup",validators=[InputRequired()])
 	drop = StringField("Drop",validators=[InputRequired()])
 
+class PickLocationCharter(FlaskForm):
+	pickup = StringField("Pickup",validators=[InputRequired()])
+
+
 class PickLocationIndexForm(FlaskForm):
 	pickup = StringField("Where do want to go",validators=[InputRequired()])
 	drop = StringField("",validators=[InputRequired()])
@@ -32,6 +36,13 @@ class AddCabTransferRouteForm(FlaskForm):
 	standard = IntegerField("standard",validators=[InputRequired()])
 	executive = IntegerField("executive",validators=[InputRequired()])
 	minibus = IntegerField("minibus",validators=[InputRequired()])
+
+class AddCabCharterRouteForm(FlaskForm):
+	pickup = StringField("Pickup",validators=[InputRequired()])	
+	micro = IntegerField("micro",validators=[InputRequired()])
+	standard = IntegerField("standard",validators=[InputRequired()])
+	executive = IntegerField("executive",validators=[InputRequired()])
+	minibus = IntegerField("minibus",validators=[InputRequired()])	
 
 
 class CabTransferDetailForm(FlaskForm):
@@ -49,6 +60,12 @@ class CabTransferDetailForm(FlaskForm):
 	phone = StringField("Phone",validators=[InputRequired()])
 	date = DateField("Date",format="%m/%d/%Y")
 	detail = StringField("How Many Person",validators=[InputRequired()])		
+	hour = SelectField("Time",choices=[("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),("6","6"),("7","7"),("8","8"),("9","9"),
+		("10","10"),("11","11"),("12","12"),])
+	time = SelectField("Time",choices=[("AM","AM"),("PM","PM")])
+
+
+
 
 class EditCabTransferDetailForm(FlaskForm):
 	car = SelectField("Car",choices= [("on request","on request"),("micro","micro"),("standard","standard"),("executive","executive"),("minibus","minibus")])
@@ -72,7 +89,11 @@ class CabCharterDetailForm(FlaskForm):
 	phone = StringField("Phone",validators=[InputRequired()])
 	date = DateField("Date",format="%m/%d/%Y")
 	hour = SelectField("Hour",choices= [("6","6"),("12","12")])
-	detail = StringField("How Many Person",validators=[InputRequired()])		
+	detail = StringField("How Many Person",validators=[InputRequired()])	
+	jam = SelectField("Time",choices=[("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),("6","6"),("7","7"),("8","8"),("9","9"),
+		("10","10"),("11","11"),("12","12"),])
+	time = SelectField("Time",choices=[("AM","AM"),("PM","PM")])
+	
 
 class AddVoucherForm(FlaskForm):
 	title = StringField("title",validators=[InputRequired()])
@@ -133,4 +154,9 @@ class AddLocationForm(FlaskForm):
 	location = StringField("Location",validators=[InputRequired()])
 
 
+class AddTravelAgentForm(FlaskForm):
+	email = StringField("Email",validators=[Email()])
+	username = StringField("Name",validators=[InputRequired()])
+	phone = StringField("Phone",validators=[InputRequired()])
+	
 

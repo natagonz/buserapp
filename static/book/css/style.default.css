@@ -327,10 +327,12 @@ nav.navbar {
   padding-bottom: 15px;
   -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: black;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
+
+
 
 nav.navbar .navbar-brand {
   font-weight: 800;
@@ -339,7 +341,7 @@ nav.navbar .navbar-brand {
 }
 
 nav.navbar a.nav-link {
-  color: #333;
+  color: #ffffff;
   font-size: 1.1rem;
 }
 

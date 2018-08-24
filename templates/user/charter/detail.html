@@ -12,8 +12,7 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Charter Detail</h5>        
-        <p class="card-text">Pickup : {{ pickup }}</p>
-        <p class="card-text">Drop : {{ drop }}</p> 
+        <p class="card-text">Pickup : {{ pickup }}</p>        
         <p class="card-text">Car : {{ car }}</p> 
         <p class="card-text">Price : $ {{ amount }}/hour</p>                              
       </div>
@@ -42,8 +41,14 @@
             <div class="form-group col-md-6">
               {{ render_field(form.phone, class="form-control",autocomplete="off")}}
             </div>
-            <div class="form-group col-md-12">
+             <div class="form-group col-md-6">
               {{ render_field(form.date, class="form-control dtpick",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-4">
+              {{ render_field(form.jam, class="form-control",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-2">
+              {{ render_field(form.time, class="form-control",autocomplete="off")}}
             </div>                  
           </div>     
           <div class="form-row">
