@@ -7,6 +7,11 @@
 
 .pad-top {
     padding-top:30px;
+    background-color: black !important;
+}
+
+.pad{
+	color: white !important;
 }
 .pad-bottom {
      padding-bottom:50px;
@@ -23,3 +28,4 @@
 	height: 50px;
 	width: 200px;
 }
+

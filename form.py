@@ -61,7 +61,7 @@ class CabTransferDetailForm(FlaskForm):
 	date = DateField("Date",format="%m/%d/%Y")
 	detail = StringField("How Many Person",validators=[InputRequired()])		
 	hour = SelectField("Time",choices=[("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),("6","6"),("7","7"),("8","8"),("9","9"),
-		("10","10"),("11","11"),("12","12"),])
+		("10","10"),("11","11"),("12","12")])
 	time = SelectField("Time",choices=[("AM","AM"),("PM","PM")])
 
 
