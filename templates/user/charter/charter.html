@@ -18,10 +18,44 @@
           <form method="POST" enctype="multipart/form-data" id="form">
            {{ form.hidden_tag() }}
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
                {{ render_field(form.pickup, class="form-control",id="txt_Source")}}
+            </div>                       
+             
+            <div class="form-group col-md-6">
+               {{ render_field(form.email, class="form-control",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-6">
+              {{ render_field(form.username, class="form-control",autocomplete="off")}}
             </div>            
-          </div>                  
+          </div>                    
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              {{ render_field(form.code, class="form-control",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-6">
+              {{ render_field(form.phone, class="form-control",autocomplete="off")}}
+            </div>
+             <div class="form-group col-md-6">
+              {{ render_field(form.date, class="form-control dtpick",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-4">
+              {{ render_field(form.jam, class="form-control",autocomplete="off")}}
+            </div>
+            <div class="form-group col-md-2">
+              {{ render_field(form.time, class="form-control",autocomplete="off")}}
+            </div>                  
+          </div>     
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              {{ render_field(form.hour, class="form-control",autocomplete="off")}}
+            </div>
+          </div>          
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              {{ render_field(form.detail, class="form-control",autocomplete="off")}}
+            </div>
+          </div>               
           <button type="submit" class="btn btn-primary">Book Now</button>
          </form>
       </div>

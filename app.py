@@ -10,7 +10,7 @@ from flask_mail import Mail,Message
 from functools import wraps
 from form import UserLoginForm,RegisterForm,LoginForm,PickLocationForm,EditStatusForm,PickLocationIndexForm,AddCabTransferRouteForm
 from form import CabTransferDetailForm,EditCabTransferDetailForm,CabCharterDetailForm,AddVoucherForm,VoucherBookForm,BodyguardPriceForm,AddBuserDriverForm,EditBuserDriverForm,FilterDriverForm
-from form import AddLocationForm,AddCabCharterRouteForm,PickLocationCharter,AddTravelAgentForm
+from form import AddLocationForm,AddCabCharterRouteForm,PickLocationCharter,AddTravelAgentForm,CharterBookForm
 import hashlib
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField ,TextAreaField, IntegerField, DateField, SelectField, SubmitField,FloatField,DecimalField
@@ -483,8 +483,8 @@ def AdminCharterEdit(id):
 	if form.validate_on_submit():
 		pickup = request.form["pickup"]	
 		#check
-		check = CabCharter.query.filter_by(pickup=pickup).first()
-		if check:
+		check = CabCharter.query.filter_by(pickup=pickup).all()
+		if len(check) > 1:
 			flash("Rute sudah ada","danger")
 		else :
 			cab.pickup = pickup			
@@ -553,25 +553,51 @@ def AdminCharterBookDelete(id):
 	return redirect(url_for("AdminCharterBookAll"))
 
 
+#revisi
 @app.route("/charter",methods=["GET","POST"])
 def UserCharterTransfer():
-	form = PickLocationCharter()
+	form = CharterBookForm()
 	if form.validate_on_submit():
 		pickup = form.pickup.data 		
 		route = CabCharter.query.filter_by(pickup=pickup).first()
-		if route:
-			return redirect(url_for("UserCharterTransferCar",pickup=pickup))
+		user = User.query.filter_by(email=form.email.data).first()
+		phone = str(form.code.data) + str(form.phone.data)
+		jam = str(form.jam.data) + " " + str(form.time.data)
+		hour = form.hour.data 	
+		if user:
+			login_user(user)											
+			book = CabCharterBook(jam=jam,car="on request",pickup=pickup,price=0,username=form.username.data,hour=hour,
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=user.id,driver="on request")
+			db.session.add(book)
+			db.session.commit()
 		else :
-			return redirect(url_for("UserCharterTransferRequest",pickup=pickup))			
+			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
+			db.session.add(new)
+			db.session.commit()
+			login_user(new)	
+			
+			book = CabCharterBook(jam=jam,car="on request",pickup=pickup,price=0,username=form.username.data,hour=hour,
+				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=new.id,driver="on request")
+			db.session.add(book)
+			db.session.commit()
+		
+		if route:
+			return redirect(url_for("UserCharterTransferCar",pickup=pickup,id=book.id))
+		else :
+			return redirect(url_for("UserCabTransferNotification"))			
 	return render_template("user/charter/charter.html",form=form)
 
-@app.route("/charter/<pickup>",methods=["GET","POST"])
-def UserCharterTransferCar(pickup):	
-	route = CabCharter.query.filter_by(pickup=pickup).first()
-	return render_template("user/charter/car.html",route=route,pickup=pickup)
 
-@app.route("/charter/<pickup>/<car>",methods=["GET","POST"])
-def UserCharterTransferDetail(pickup,car):
+@app.route("/charter/<pickup>/<id>",methods=["GET","POST"])
+@login_required
+def UserCharterTransferCar(pickup,id):
+	route = CabCharter.query.filter_by(pickup=pickup).first()
+	book = CabCharterBook.query.filter_by(id=id).first()
+	return render_template("user/charter/car.html",route=route,pickup=pickup,book=book)
+
+
+@app.route("/charter/<pickup>/<car>/<id>",methods=["GET","POST"])
+def UserCharterTransferDetail(pickup,car,id):
 	route = CabCharter.query.filter_by(pickup=pickup).first()
 	if car == "micro":
 		amount = route.micro
@@ -581,61 +607,15 @@ def UserCharterTransferDetail(pickup,car):
 		amount = route.executive
 	else:
 		amount =route.minibus
+
+	book = CabCharterBook.query.filter_by(id=id).first()
+	hour = int(book.hour)
+	price = amount * hour
+	book.price = price
+	book.car = car 
+	db.session.commit()
 	
-	form = CabCharterDetailForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
-		phone = str(form.code.data) + str(form.phone.data)
-		jam = str(form.jam.data) + " " + str(form.time.data)	
-		if user:
-			login_user(user)		
-			hour = form.hour.data 
-			price = amount * int(hour)				
-			book = CabCharterBook(jam=jam,car=car,pickup=pickup,price=price,username=form.username.data,hour=hour,
-				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=user.id,driver="on request")
-			db.session.add(book)
-			db.session.commit()
-		else :
-			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
-			db.session.add(new)
-			db.session.commit()
-			login_user(new)	
-			hour = form.hour.data 
-			price = amount * int(hour)	
-			book = CabCharterBook(jam=jam,car=car,pickup=pickup,price=price,username=form.username.data,hour=hour,
-				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="unpaid",chartertransfer_id=new.id,driver="on request")
-			db.session.add(book)
-			db.session.commit()
-		return redirect(url_for("UserCharterTransferPayment",id=book.id))
-	return render_template("user/charter/detail.html",form=form,pickup=pickup,amount=amount,car=car)
-
-
-@app.route("/charter/<pickup>/request/book",methods=["GET","POST"])
-def UserCharterTransferRequest(pickup):		
-	form = CabCharterDetailForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
-		phone = str(form.code.data) + str(form.phone.data)
-		jam = str(form.jam.data) + " " + str(form.time.data)
-		if user:
-			login_user(user)		
-			hour = form.hour.data 						
-			book = CabCharterBook(jam=jam,car="on request",pickup=pickup,price=0,username=form.username.data,hour=hour,
-				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=user.id,driver="on request")
-			db.session.add(book)
-			db.session.commit()
-		else :
-			new = User(username=form.username.data,email=form.email.data,phone=phone,role="user")
-			db.session.add(new)
-			db.session.commit()
-			login_user(new)	
-			hour = form.hour.data 			
-			book = CabCharterBook(jam=jam,car="on request",pickup=pickup,price=0,username=form.username.data,hour=hour,
-				email=form.email.data,phone=phone,date=form.date.data,detail=form.detail.data,status="on request",chartertransfer_id=new.id,driver="on request")
-			db.session.add(book)
-			db.session.commit()
-		return redirect(url_for("UserCabTransferNotification"))
-	return render_template("user/charter/request.html",form=form,pickup=pickup)
+	return redirect(url_for("UserCharterTransferPayment",id=id))
 
 
 @app.route("/charter/payment/<id>",methods=["GET","POST"])
@@ -644,8 +624,6 @@ def UserCharterTransferPayment(id):
 	secret = str(book.price) + "17cclrc"
 	md5 = hashlib.md5(secret).hexdigest()
 	return render_template("user/charter/payment.html",book=book,md5=md5)
-
-
 
 
 
