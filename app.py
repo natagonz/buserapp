@@ -976,6 +976,25 @@ def AllTravelAgent():
 
 
 
+################################################ Buser Adz ############################
+@app.route("/buseradz",methods=["GET","POST"])
+def BuserAdzIndex():
+	return render_template("buseradz/index.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
